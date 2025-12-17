@@ -10,7 +10,7 @@ export default function FacebookLivePlayer({ liveUrl }: Props) {
   )}&show_text=false`;
 
   return (
-    <div style={{ width: "100%", aspectRatio: "16 / 9" }}>
+    <div className="w-full aspect-video overflow-hidden rounded-lg">
       <iframe
         src={embedUrl}
         width="100%"
@@ -18,7 +18,7 @@ export default function FacebookLivePlayer({ liveUrl }: Props) {
         style={{ border: "none", overflow: "hidden" }}
         scrolling="no"
         frameBorder={0}
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+        allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
       />
     </div>

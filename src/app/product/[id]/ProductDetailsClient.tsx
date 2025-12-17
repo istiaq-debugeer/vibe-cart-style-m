@@ -1,9 +1,16 @@
-// src/app/product/[id]/ProductDetailsClient.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Heart, Star, ShoppingCart, Minus, Plus } from "lucide-react";
+import {
+  ArrowLeft,
+  Heart,
+  Star,
+  ShoppingCart,
+  Minus,
+  Plus,
+} from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useGetProductByIdQuery } from "@/lib/productApi";
@@ -12,29 +19,32 @@ import FacebookLivePlayer from "@/components/facebooklikevideo";
 export default function ProductDetailsClient({ id }: { id: string }) {
   const router = useRouter();
 
-  // 🔹 RTK Query hook (ALWAYS called)
   const { data: product, isLoading, error } = useGetProductByIdQuery(id);
 
-  // 🔹 Local state hooks (ALWAYS called)
   const [isLiked, setIsLiked] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>("");
+
+  // ✅ CORRECT Facebook Live URL (NO extra slash)
   const FACEBOOK_LIVE_URL =
-    "https://www.facebook.com/dailyshobji/videos/835290475972347/"
-  // 🔹 Effect hook (ALWAYS called)
+    "https://www.facebook.com/dailyshobji/videos/1514516669845709/";
+
   useEffect(() => {
     if (product?.sizes?.length) {
       setSelectedSize(product.sizes[0]);
     }
   }, [product]);
 
-  // ⛔ RETURNS ONLY AFTER ALL HOOKS
   if (isLoading) {
     return <div className="p-4 text-center">Loading product...</div>;
   }
 
   if (error || !product) {
-    return <div className="p-4 text-center text-red-500">Product not found</div>;
+    return (
+      <div className="p-4 text-center text-red-500">
+        Product not found
+      </div>
+    );
   }
 
   const handleQuantityChange = (change: number) => {
@@ -54,25 +64,28 @@ export default function ProductDetailsClient({ id }: { id: string }) {
             variant="ghost"
             size="icon"
             onClick={() => setIsLiked(!isLiked)}
-            className={`${isLiked ? "text-red-500" : "text-gray-500"}`}
+            className={isLiked ? "text-red-500" : "text-gray-500"}
           >
-            <Heart className={`h-5 w-5 ${isLiked ? "fill-current" : ""}`} />
+            <Heart
+              className={`h-5 w-5 ${isLiked ? "fill-current" : ""}`}
+            />
           </Button>
         </div>
       </header>
 
       <main className="mx-auto max-w-5xl px-4">
-        {/* IMAGE */}
+        {/* PRODUCT IMAGE */}
         <img
           src={product.images[0]}
           alt={product.name}
-          className="w-full h-[500px] object-cover"
+          className="w-full h-[500px] object-cover rounded-lg"
         />
 
-        {/* INFO */}
-        {/* Facebook Live */}
-      <FacebookLivePlayer liveUrl={FACEBOOK_LIVE_URL} />
-        <div className="bg-white px-4 py-4">
+        {/* ✅ FACEBOOK LIVE VIDEO */}
+        <FacebookLivePlayer liveUrl={FACEBOOK_LIVE_URL} />
+
+        {/* PRODUCT INFO */}
+        <div className="bg-white px-4 py-4 rounded-lg">
           <h1 className="text-xl font-bold">{product.name}</h1>
 
           <div className="flex items-center gap-2 my-2">
@@ -91,17 +104,24 @@ export default function ProductDetailsClient({ id }: { id: string }) {
             </span>
           </div>
 
-          <p className="text-gray-600 mb-4">{product.description}</p>
+          <p className="text-gray-600 mb-4">
+            {product.description}
+          </p>
 
           {/* SIZE */}
           <div className="mb-4">
             <h3 className="font-medium mb-2">Size</h3>
             <div className="flex gap-2">
-              {(product.sizes.length ? product.sizes : ["M"]).map((size) => (
+              {(product.sizes.length
+                ? product.sizes
+                : ["M"]
+              ).map((size) => (
                 <Button
                   key={size}
                   size="sm"
-                  variant={selectedSize === size ? "default" : "outline"}
+                  variant={
+                    selectedSize === size ? "default" : "outline"
+                  }
                   onClick={() => setSelectedSize(size)}
                 >
                   {size}
@@ -114,11 +134,17 @@ export default function ProductDetailsClient({ id }: { id: string }) {
           <div className="mb-6">
             <h3 className="font-medium mb-2">Quantity</h3>
             <div className="flex items-center gap-3">
-              <Button size="icon" onClick={() => handleQuantityChange(-1)}>
+              <Button
+                size="icon"
+                onClick={() => handleQuantityChange(-1)}
+              >
                 <Minus />
               </Button>
               <span>{quantity}</span>
-              <Button size="icon" onClick={() => handleQuantityChange(1)}>
+              <Button
+                size="icon"
+                onClick={() => handleQuantityChange(1)}
+              >
                 <Plus />
               </Button>
             </div>
@@ -127,7 +153,10 @@ export default function ProductDetailsClient({ id }: { id: string }) {
 
         {/* ADD TO CART */}
         <div className="sticky bottom-0 bg-white p-4 border-t">
-          <Button className="w-full" onClick={() => router.push("/cart")}>
+          <Button
+            className="w-full"
+            onClick={() => router.push("/cart")}
+          >
             <ShoppingCart className="mr-2 h-4 w-4" />
             Add to Cart
           </Button>
