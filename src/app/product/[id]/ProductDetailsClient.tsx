@@ -27,7 +27,7 @@ export default function ProductDetailsClient({ id }: { id: string }) {
 
   // ✅ CORRECT Facebook Live URL (NO extra slash)
   const FACEBOOK_LIVE_URL =
-    "https://www.facebook.com/dailyshobji/videos/1514516669845709/";
+    "https://www.facebook.com/live/producer/1401822878076745/";
 
   useEffect(() => {
     if (product?.sizes?.length) {
